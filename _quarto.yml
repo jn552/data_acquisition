@@ -1,0 +1,9 @@
+project:
+  type: website
+
+website:
+  title: "Did COVID Change the Profile of Popular Movies on TMDB?"
+
+format:
+  html:
+    toc: true
