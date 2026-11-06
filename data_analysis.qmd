@@ -1,0 +1,54 @@
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("data/movies_clean.csv")
+```
+
+```{python}
+plt.clf()
+cleaned_data = data.copy()
+
+pre_covid_mask = cleaned_data["release_year"].between(2017, 2019)
+covid_mask = cleaned_data["release_year"].between(2020, 2023)
+post_covid_mask = cleaned_data["release_year"].between(2024, 2026)
+
+pre_covid_movies = cleaned_data[pre_covid_mask]
+covid_movies = cleaned_data[covid_mask]
+post_covid_movies = cleaned_data[post_covid_mask]
+```
+
+
+```{python}
+combined = pd.concat([
+    pre_covid_movies.assign(Time='pre_covid'),
+    covid_movies.assign(Time='covid'),
+    post_covid_movies.assign(Time='post_covid')
+])
+
+combined.boxplot(by='Time', column=["vote_avg"])
+```
+
+```{python}
+# denisty of vote score by time period
+plt.clf()
+pre_covid_movies["vote_avg"].plot.density(label="pre-covid")
+covid_movies["vote_avg"].plot.density(label="covid")
+post_covid_movies["vote_avg"].plot.density(label="post-covid")
+cleaned_data["vote_avg"].plot.density(label="all years")
+plt.legend()
+plt.xlabel("Vote Average Score")
+```
+
+```{python}
+len(pre_covid_movies) + len(covid_movies) + len(post_covid_movies)
+
+plt.clf()
+cleaned_data.groupby("release_year").agg(avg_profit=("profit", "mean")).plot.line()
+
+plt.clf()
+cleaned_data.groupby("release_year").agg(avg_budget=("budget", "mean")).plot.line()
+
+plt.clf()
+cleaned_data.groupby("release_year").agg(avg_rev=("revenue", "mean")).plot.line()
+```

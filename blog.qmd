@@ -1,0 +1,27 @@
+"Did COVID Change the Profile of Popular Movies on TMDB?"
+
+TODO - make readme that explains contents of the repo
+TODO - clean up code
+TODO - add links tources (do like see here, documentation, oscars, WHO)
+TODO - publish page and make quarto project
+TODO - add numbers and pretify plots
+
+COVID-19 changed a lot of things in the world. For example, Zoom became a thing, and workplaces shifted to more hybrid and remote options. And we still see the effects of these changes today! With that in mind, I wanted to investigate whether the pandemic affected the movie scene. In particular, I wanted to see if there were any notable changes in movie ratings, the genres of movies being produced, and movie revenue. Using TMDB's API, I investigated how ratings, genre representation, and movie revenue differ among popular movies (according to TMDB) released before, during, and after COVID.
+
+Before I analyzed the data, I reviewed TMDB's API terms and conditions to ensure I could use their data to answer this question. Upon reading them I discovered that anyone using their API for any website must acknowledge the following: 
+
+"This website uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB."
+
+I must also include their logo somewhere on the website where it can be easily seen. With that out of the way, because I am not training any ML model or using this data for commercial use, which they prohibit, I determined that it was ethical to use their data. In addition to this, I was polite with my requests by using Python's time module to pause for 0.05 seconds between each request, which is well below their limit of 40 requests per second.
+
+I used TMDB’s API documentation to learn how to structure my requests and choose filters to narrow my search. I queried their Discover Movies endpoint one release year at a time by setting a release date range and sorting the results by popularity in descending order. For each year, I requested three pages of results. These responses included movie IDs, which I then used to request each movie’s detailed information. I then extracted the movie fields relevant to my project, such as ratings, genres, runtime, budget, and revenue, and saved the records in a JSON file. Because I sorted by popularity, my dataset represents popularity-ranked TMDB results for each year, rather than a random sample of all movies. I then removed any movies without titles, movies with zero revenue (because the zero likely means that info is missing), movies less than 40 minutes (40 minutes is the minimum to be considered a feature film in the Academy Awards), and any movie with ratings based on fewer than 100 people.
+
+After cleaning the data, I was left with 336 movies from 2017 to the present day (11/5/2026) with a total of 17 genres. For my analysis, I defined 2017-2019 as pre-COVID (I didn't want to include movies too far from COVID), 2020-2023 as during COVID (I included 2023 because that's when WHO officially declared the pandemic was no longer an international concern), and 2024 to the present day as post-COVID. Here are some highlights from my analysis.
+
+Among the popularity-ranked TMDB movies in my sample with nonzero reported revenue, the median revenue fell sharply in 2020, reaching a low of [INSERT NUMBER HERE] and then rose through 2025, with some fluctuation year to year. I excluded 2026 because the year is incomplete. It is important to note that these are simply reported revenue numbers from my sample so the pattern does not show that COVID caused the drop. The revenue also isn't adjusted for inflation, but the drop is clearly there. 
+
+If we then take a look at average movie ratings across pre-COVID, during COVID, and post-COVID years, we see that, surprisingly, there's no large visible difference in average movie ratings for the most popular movies in those years despite the drop in revenue. The median for pre-, during, and post-COVID were [INSERT NUMBERS HERE], respectively.
+
+I also took a look at genre distribution between these 3 time periods. I calculated the percentage of movies that fell in each genre for each of the 3 time periods. The percentages add up to more than 100 because most movies had 2-3 genres associated with them. Below is a bar plot of these percentages across each time period. The most visible difference is in horror, action, and drama films. From pre-, during, and post-COVID, the percentage of horror movies went increased from [INSERT NUMBERS HERE], the percentage of action movies decreased from {INSERT NUMBERS HERE} and the drama percentages decreased from [INSERT NUMBERS HERE].
+
+Overall, the clearest change in the most popular movies (according to TMDB) across time was in reported revenue, showing a sharp decrease around 2020, then rising gradually. Movie ratings looked similar across the time periods, while genre distribution showed some changes but no complete change in the variety. Again, these results only describe this sample, and don’t show that COVID caused any of these patterns. It would be interesting to compare these results with inflation-adjusted revenue and with a sample that isn't selected by TMDB popularity.
